@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_desc">Formula 1 Car</string>
+    <string name="materia">Mobile Application Development</string>
+    <string name="bottom_app_bar">Bottom part</string>
+    <string name="home_fab_text">I am a snackbar</string>
+    <string name="texto_snackbar">This is a snackbar</string>
+    <string name="texto_snackbar">This is a snackbar</string>
+
+
+</resources>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">Practica2.2.1</string>
+    <string name="image_desc">Carro de Formula 1</string>
+    <string name="materia">Desarrollo de Aplicaciones para Dispositivos Móviles</string>
+    <string name="nombre" translatable="false">Arantza Darina</string>
+    <string name="apellido" translatable="false">Gómez Hernández</string>
+    <string name="title" translatable="false">Practica2.2.1</string>
+    <string name="back_btn_desc" translatable="false">Botón para regresar</string>
+    <string name="bottom_app_bar">Parte de abajo</string>
+    <string name="home_fab_text">Soy un snackbar</string>
+    <string name="texto_snackbar">Esto es un snackbar</string>
+
+</resources>

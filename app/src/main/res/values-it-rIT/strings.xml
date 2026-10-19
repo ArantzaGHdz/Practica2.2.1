@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_desc">Auto di Formula 1</string>
+    <string name="materia">Sviluppo di applicazioni mobili</string>
+    <string name="bottom_app_bar">Parte inferiore</string>
+    <string name="home_fab_text">Sono uno snackbar</string>
+    <string name="texto_snackbar">Questo è uno snackbar</string>
+
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="image_desc">포뮬러 1 경주차</string>
+    <string name="materia">모바일 애플리케이션 개발</string>
+    <string name="bottom_app_bar">아랫부분</string>
+    <string name="home_fab_text">저는 스낵바입니다.</string>
+    <string name="texto_snackbar">여기는 스낵바입니다.</string>
+</resources>
