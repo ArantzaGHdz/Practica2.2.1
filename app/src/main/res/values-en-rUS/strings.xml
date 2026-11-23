@@ -5,7 +5,11 @@
     <string name="bottom_app_bar">Bottom part</string>
     <string name="home_fab_text">I am a snackbar</string>
     <string name="texto_snackbar">This is a snackbar</string>
-    <string name="texto_snackbar">This is a snackbar</string>
+    <string name="menu_opciones">Hola</string>
+    <string name="llamada">Profile</string>
+    <string name="bluetooth">Configuration</string>
+    <string name="contactos">Logout</string>
+    <string name="champion">Kimi Antonelli gana el Campeonato de pilotos en F1</string>
 
 
 </resources>

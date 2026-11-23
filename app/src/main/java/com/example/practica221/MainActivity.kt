@@ -1,7 +1,12 @@
 package com.example.practica221
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,6 +15,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,14 +27,26 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddLink
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -37,6 +55,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,12 +72,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.example.practica221.ui.theme.Practica221Theme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private val TAG = "MainActivity"
+
+    private var keepSplash = true
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen=installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { keepSplash }
+
+        lifecycleScope.launch {
+            delay(3000)
+            keepSplash = false
+        }
         super.onCreate(savedInstanceState)
+
+        ShowToast("Función onCreate()")
         enableEdgeToEdge()
         setContent {
             Practica221Theme {
@@ -66,12 +100,41 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        ShowToast("Función onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ShowToast("Función onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        ShowToast("Función onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        ShowToast("Función onStop")
+    }
+
+    fun ShowToast(message:String) {
+        val toast = Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_LONG
+        )
+        toast.show()
+        Log.i(TAG, message);
+    }
 }
 
 /*/ Preview Horizontal
 // device = "spec:width=411dp,height=891dp,orientation=landscape"
  */
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(
@@ -81,85 +144,219 @@ class MainActivity : ComponentActivity() {
 )
 @Composable
 fun ViewContainer(){
-    val intentContext = LocalContext.current;
     val snackbarHostState = remember { SnackbarHostState() };
     val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed);
+    val context = LocalContext.current;
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
 
-        topBar = {
-            TopAppBar(
-                title = {Text(stringResource(R.string.title))},
-                colors = TopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    scrolledContainerColor = MaterialTheme.colorScheme.secondary,
-                    navigationIconContentColor = Color.White,
-                    titleContentColor = Color.White,
-                    actionIconContentColor = Color.White,
-                    subtitleContentColor = Color.White
-                ),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.back_btn_desc),
-                            tint = Color.White
-                        )
-                    }
-                }
-            )
-        },
-
-        bottomBar = {
-            BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.primary
-            ) {
+    ModalNavigationDrawer (
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
                 Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(R.string.bottom_app_bar),
-                    color = Color.White,
-                    fontSize = 18.sp,
+                    text = "Menú de Inicio",
+                    modifier = Modifier.padding(16.dp)
+                )
+
+                NavigationDrawerItem(
+                    label = { Text("Inicio") },
+                    selected = false,
+                    onClick = {
+                        scope.launch {
+                            drawerState.close()
+                        }
+                    }
                 )
             }
-        },
+        }
+    ){
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            },
 
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text("Mostrar")},
-                icon = { Icon(Icons.Default.Add, contentDescription = "") },
-                onClick={
-                    scope.launch {
-                        val result = snackbarHostState
-                            .showSnackbar(
-                                message = intentContext.getString(R.string.texto_snackbar),
-                                actionLabel = "Action",
-                                duration = SnackbarDuration.Indefinite
-                            )
-                        when (result) {
-                            SnackbarResult.ActionPerformed -> {
-
+            topBar = {
+                TopAppBar(
+                    title = { Text(stringResource(R.string.title)) },
+                    colors = TopAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        scrolledContainerColor = MaterialTheme.colorScheme.secondary,
+                        navigationIconContentColor = Color.White,
+                        titleContentColor = Color.White,
+                        actionIconContentColor = Color.White,
+                        subtitleContentColor = Color.White
+                    ),
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    if (drawerState.isClosed){
+                                        drawerState.open()
+                                    } else {
+                                        drawerState.close()
+                                    }
+                                }
                             }
-                            SnackbarResult.Dismissed -> {
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = stringResource(R.string.back_btn_desc),
+                                tint = Color.White
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(onClick = { openWebScreen(context) }) {
+                            Icon(
+                                imageVector = Icons.Default.AddLink,
+                                contentDescription = "Marcar como favorito",
+                                tint = Color.White
+                            )
 
+                        }
+
+                        IconButton(
+                            onClick = {
+                                val intent = Intent(context, SecondActivity::class.java)
+                                context.startActivity(intent)
+                            }) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = "Compartir",
+                                tint = Color.White
+                            )
+                        }
+                        DropDownMenu()
+                    }
+
+                )
+            },
+
+            bottomBar = {
+                BottomAppBar(
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.bottom_app_bar),
+                        color = Color.White,
+                        fontSize = 18.sp,
+                    )
+                }
+            },
+
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    text = { Text("Mostrar") },
+                    icon = { Icon(Icons.Default.Add, contentDescription = "") },
+                    onClick = {
+                        scope.launch {
+                            val result = snackbarHostState
+                                .showSnackbar(
+                                    message = context.getString(R.string.texto_snackbar),
+                                    actionLabel = "Action",
+                                    duration = SnackbarDuration.Indefinite
+                                )
+                            when (result) {
+                                SnackbarResult.ActionPerformed -> {
+
+                                }
+
+                                SnackbarResult.Dismissed -> {
+
+                                }
                             }
                         }
                     }
-                }
+                )
+            }
+
+
+            //modifier = Modifier.fillMaxSize()
+        ) { innerPadding ->
+            ContentView()
+        }
+    }
+}
+
+fun openWebScreen(context: Context) {
+    try {
+        val url = Uri.parse("https://github.com/")
+        val intent = Intent(Intent.ACTION_VIEW, url)
+        context.startActivity(intent)
+    } catch (e: Exception){
+        Toast.makeText(context, "Escoge un navegador",
+            Toast.LENGTH_LONG).show()
+    }
+}
+
+@Composable
+fun DropDownMenu() {
+    var expanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current;
+    Box {
+        IconButton(onClick = { expanded = true }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = stringResource(R.string.menu_opciones),
+                tint= Color.White
             )
         }
 
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.llamada)) },
+                onClick = {
+                    expanded = false
+                    val intent = Intent(
+                        Intent.ACTION_DIAL,
+                        Uri.parse("tel:4492331700")
+                    )
+                    context.startActivity(intent)
+                // Acción para Llamada
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.Person, contentDescription = null)
+                }
+            )
 
-        //modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
-        ContentView()
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.bluetooth)) },
+                onClick = {
+                    expanded = false
+                    val intent = Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
+                    context.startActivity(intent)
+                // Acción para Bluetooth
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.Settings, contentDescription = null)
+                }
+            )
+
+            HorizontalDivider()
+
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.contactos)) },
+                onClick = {
+                    expanded = false
+                    val intent = Intent(Intent.ACTION_MAIN).apply {
+                        addCategory(Intent.CATEGORY_APP_CONTACTS)
+                    }
+                    context.startActivity(intent)
+                // Acción para Contactos
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.ExitToApp, contentDescription = null)
+                }
+            )
+        }
     }
 }
 

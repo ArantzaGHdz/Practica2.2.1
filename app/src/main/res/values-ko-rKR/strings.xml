@@ -6,4 +6,9 @@
     <string name="bottom_app_bar">아랫부분</string>
     <string name="home_fab_text">저는 스낵바입니다.</string>
     <string name="texto_snackbar">여기는 스낵바입니다.</string>
+    <string name="menu_opciones">Hola</string>
+    <string name="llamada">Segundo texto</string>
+    <string name="bluetooth">Configuración</string>
+    <string name="contactos">Cerrar sesión</string>
+    <string name="champion">Kimi Antonelli gana el Campeonato de pilotos en F1</string>
 </resources>

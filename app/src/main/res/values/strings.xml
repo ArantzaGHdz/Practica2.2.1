@@ -9,5 +9,11 @@
     <string name="bottom_app_bar">Parte de abajo</string>
     <string name="home_fab_text">Soy un snackbar</string>
     <string name="texto_snackbar">Esto es un snackbar</string>
+    <string name="llamada">Llamada</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="contactos">Contactos</string>
+    <string name="menu_opciones">Menu de opciones</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="champion">Kimi Antonelli gana el Campeonato de pilotos en F1</string>
 
 </resources>
